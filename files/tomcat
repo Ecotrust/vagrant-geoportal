@@ -1,0 +1,6 @@
+#! /bin/bash
+
+# chkconfig: 2345 98 02
+# description: Apache Tomcat
+
+/usr/local/tomcat6/bin/startup.sh
