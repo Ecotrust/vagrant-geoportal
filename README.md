@@ -8,16 +8,21 @@ Create a vm serving GeoPortal in a matter of minutes.
 
 ### Install Postgres, Tomcat, and ESRI GeoPortal Server*
 ```fab dev init```
-*Must install Fabric on your own computer
+* Must install Fabric on your own computer
 
-###Prompts:
-*Password for vagrant
+### Prompts:
+* Password for vagrant
 ``vagrant``
-*Create Password for user postgres
+* Create Password for user postgres
 ``postgres``
-(accept the defaults)
-*Create password for role geoportal
+    (accept the defaults)
+* Create password for role geoportal
 ``geoportal``
-(accept the defaults)
-*Password for postgres
+    (accept the defaults)
+* Password for postgres
 ``postgres``
+
+### Using
+* Open a browser and navigate to http://localhost:8081/geoportal/catalog/main/home.page
+* Click 'Login'
+* Enter credentials 'gptuser', 'gptuser'
