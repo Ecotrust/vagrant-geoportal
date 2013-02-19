@@ -23,6 +23,6 @@ Create a vm serving GeoPortal in a matter of minutes.
 ``postgres``
 
 ### Using
-* Open a browser and navigate to http://localhost:8081/geoportal/catalog/main/home.page
+* Open a browser and navigate to [http://localhost:8081/geoportal/catalog/main/home.page] (http://localhost:8081/geoportal/catalog/main/home.page)
 * Click 'Login'
 * Enter credentials 'gptuser', 'gptuser'
