@@ -3,6 +3,8 @@ vagrant-geoportal
 
 Create a vm serving GeoPortal in a matter of minutes.
 
+Under the files dir you will find code written by ESRI inc, licensed under the Apache License, Version 2.0. This license is included in this repository.
+
 ### Local Requirements:
 * [git] (https://help.github.com/articles/set-up-git)
 * [Vagrant] (http://www.vagrantup.com/)
