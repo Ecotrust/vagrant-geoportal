@@ -3,12 +3,16 @@ vagrant-geoportal
 
 Create a vm serving GeoPortal in a matter of minutes.
 
+### Local Requirements:
+* [git] (https://help.github.com/articles/set-up-git)
+* [Vagrant] (http://www.vagrantup.com/)
+* [Fabric] (http://fabfile.org)
+
 ### Create Virtual Machine and Install Dependencies:
 ``vagrant up``
 
-### Install Postgres, Tomcat, and ESRI GeoPortal Server*
+### Install Postgres, Tomcat, and ESRI GeoPortal Server
 ```fab dev init```
-* Must install Fabric on your own computer
 
 ### Prompts:
 * Password for vagrant
