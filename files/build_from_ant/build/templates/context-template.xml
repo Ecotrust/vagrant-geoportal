@@ -1,0 +1,11 @@
+<!-- Context configuration file for the Geoportal Web App -->
+<Context docBase="geoportal" path="/geoportal" debug="0" reloadable="true" crossContext="true">
+    <Resource name="jdbc/gpt" auth="Container" type="javax.sql.DataSource"
+              driverClassName="org.postgresql.Driver"
+			  url="$(db.connection.string)"
+              username="$(db.user.name)"
+              password="$(db.user.password)"
+              maxActive="20"
+              maxIdle="10"
+              maxWait="-1" />
+</Context>

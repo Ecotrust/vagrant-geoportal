@@ -1,0 +1,177 @@
+<project name="geoportal" default="dist" basedir=".">
+	<!-- local.properties must be supplied by the user -->
+	<property file="local.properties"/>
+
+	<property name='src.dir'       value='../../src'/>
+	<property name='lib.dir'       value='../../lib'/>
+	<property name='build.dir'     value='../../build'/>
+	<property name='classes.dir'   value='${build.dir}/WEB-INF/classes'/>
+	<property name="jar.dir"       value="${build.dir}/jar"/>
+	<property name='www.dir'       value='../../www'/>
+	<property name='template.dir'  value='templates'/>
+	
+	<!-- =========================================================================================== -->
+	<!-- Include the ant tasks required to manage the project's Tomcat web application.  These tasks -->
+	<!-- become usable by Ant when the catalina-ant.jar file found in TOMCAT_INSTALLATION/lib is     -->
+	<!-- copied to ANT_INSTALLATION/lib. This is a prerequisite to deployment.                       -->
+	<!-- =========================================================================================== -->
+	<taskdef name="deploy"   classname="org.apache.catalina.ant.DeployTask"/>
+	<taskdef name="list"     classname="org.apache.catalina.ant.ListTask"/>
+	<taskdef name="reload"   classname="org.apache.catalina.ant.ReloadTask"/>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
+	
+	<!-- =========================================================================================== -->
+	<!-- Initializes the project's work space.                                                       -->
+	<!-- =========================================================================================== -->
+	<target name='init' description='initializes workspace.'>
+	  <mkdir dir='${src.dir}'/>
+	  <mkdir dir='${lib.dir}'/>
+	  <mkdir dir='${build.dir}'/>
+	  <mkdir dir='${classes.dir}'/>
+	</target>
+
+	<!-- =========================================================================================== -->
+	<!-- Clean the project work space.                                                               -->
+	<!-- =========================================================================================== -->
+	<target name='clean' description='Clean the project work space'>
+	  <delete dir="${build.dir}"/>
+	</target>
+   
+	<!-- =========================================================================================== -->
+	<!-- Compile/classpath settings.                                                                 -->
+	<!-- =========================================================================================== -->
+	<path id="project.classpath">
+	  <fileset dir="${lib.dir}">
+		  <include name="**/*.jar" />
+	  </fileset>
+
+	  <fileset dir="${local.tomcat.home}/lib">
+		  <include name="**/*.jar" />
+	  </fileset>
+	</path>
+   
+	<!-- =========================================================================================== -->
+	<!-- Compile all of the java source files.                                                       -->
+	<!-- =========================================================================================== -->
+	<target name='compile' depends='init' description="Compile the project Java sources">
+
+	  <javac srcdir="${src.dir}"
+			 destdir="${classes.dir}"
+			 classpathref="project.classpath"
+			 includeantruntime='false'/>
+
+	</target>
+	
+	<!-- =========================================================================================== -->
+	<!-- Packages/copies all of the compiled java classes, jsp files, config files, etc to the build -->
+	<!-- location or folder.                                                                         -->
+	<!-- =========================================================================================== -->
+	<target name="dist" depends='compile' description="Copy files to build dir">
+	  <copy todir='${build.dir}'>
+		 <fileset dir='${www.dir}' excludes='**/*.bak,**/*.log/'/>
+	  </copy>
+
+	  <copy todir='${classes.dir}/gpt'>
+		 <fileset dir='${src.dir}/gpt' excludes='**/*.bak,**/*.log,config/gpt.xml'/>
+	  </copy>
+
+	  <copy todir='${build.dir}/WEB-INF/lib'>
+		 <fileset dir='${lib.dir}' excludes='**/*.bak,**/*.log'/>
+	  </copy>
+	  
+	  <copy todir='${build.dir}/WEB-INF/lib'>
+		 <fileset dir='lib' excludes='**/*.bak,**/*.log'/>
+	  </copy>
+
+	  <copy todir='${classes.dir}'>
+		 <fileset dir='${src.dir}' includes='**/*.properties' excludes='**/*.bak,**/*.log'/>
+	  </copy>
+	  
+	  <copy file='${template.dir}/context-template.xml' tofile='${build.dir}/META-INF/context.xml'/>	
+	  <copy file='${template.dir}/gpt-template.xml' tofile='${classes.dir}/gpt/config/gpt.xml'/>
+		</target>
+	
+		
+	<!-- =========================================================================================== -->
+	<!-- Perform replacements in config files for a local install.                                   -->
+	<!-- =========================================================================================== -->
+	<target name="local.package" depends='dist' description="Perform replacements in config files for a local install">
+	  
+	  <!-- Copy the context-template file and replace variables with values from local.properties -->	  
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.connection.string)' value='${local.db.connection.string}' />
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.user.name)' value='${local.db.user.name}' />
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.user.password)' value='${local.db.user.password}' />
+	  
+	  <!-- Copy the gpt-template file and replace variables with values from local.properties -->	  
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(ldap.connection.string)' value='${local.ldap.connection.string}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(lucene.index.location)' value='${local.lucene.index.location}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(lucene.rating.location)' value='${local.lucene.rating.location}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.host)' value='${mail.host}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.port)' value='${mail.port}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.emailAddress)' value='${mail.emailAddress}' />
+      <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.username)' value='${mail.username}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.password)' value='${mail.password}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(admin.name)' value='${local.admin.name}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(admin.password)' value='${local.admin.password}' />
+	</target>
+	
+	<!-- =========================================================================================== -->
+	<!-- Perform replacements in config files for a remote install.                                  -->
+	<!-- =========================================================================================== -->
+	<target name="remote.package" depends='dist' description="Perform replacements in config files for a remote install">
+	  
+	  <!-- Copy the context-template file and replace variables with values from local.properties -->
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.connection.string)' value='${remote.db.connection.string}' />
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.user.name)' value='${remote.db.user.name}' />
+	  <replace file='${build.dir}/META-INF/context.xml' token='$(db.user.password)' value='${remote.db.user.password}' />
+	  
+	  <!-- Copy the gpt-template file and replace variables with values from local.properties -->
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(ldap.connection.string)' value='${remote.ldap.connection.string}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(lucene.index.location)' value='${remote.lucene.index.location}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(lucene.rating.location)' value='${remote.lucene.rating.location}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.host)' value='${mail.host}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.port)' value='${mail.port}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.emailAddress)' value='${mail.emailAddress}' />
+      <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.username)' value='${mail.username}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(mail.password)' value='${mail.password}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(admin.name)' value='${remote.admin.name}' />
+	  <replace file='${classes.dir}/gpt/config/gpt.xml' token='$(admin.password)' value='${remote.admin.password}' />
+	</target>
+	
+	<!-- =========================================================================================== -->
+	<!-- Create the project's deployable war file.                                                   -->
+	<!-- =========================================================================================== -->
+	<target name="war" depends='dist' description="Create the project's deployable war file">
+	  <zip destfile="${build.dir}/geoportal.war">
+		 <fileset dir='${build.dir}' excludes='geoportal.war'/>
+	  </zip>
+	</target>
+   
+	<!-- =========================================================================================== -->
+	<!-- Install to local Tomcat server.                                                             -->
+	<!-- =========================================================================================== -->
+	<target name="local.deploy" depends="local.package, war" description="Install to local Tomcat server">
+
+	  <deploy url="${local.tomcat.manager.url}"
+			  username="${local.tomcat.manager}"
+			  password="${local.tomcat.manager.password}"
+			  path="/${local.geoportal.path}"
+			  update="true"
+			  war="${build.dir}/geoportal.war"/>
+
+	</target>
+	
+	<!-- =========================================================================================== -->
+	<!-- Install to remote Tomcat server.                                                            -->
+	<!-- =========================================================================================== -->
+	<target name="remote.deploy" depends="clean, remote.package, war" description="Install to remote Tomcat server">
+
+	  <deploy url="${remote.tomcat.manager.url}"
+			  username="${remote.tomcat.manager}"
+			  password="${remote.tomcat.manager.password}"
+			  path="/${remote.geoportal.path}"
+			  update="true"
+			  war="${build.dir}/geoportal.war"/>
+
+	</target>
+</project>

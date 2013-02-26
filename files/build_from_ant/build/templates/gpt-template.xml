@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gptConfig version="1.2.0">
+	<databaseReference name="gpt" jndiName="jdbc/gpt"/>
+	<!-- Mail server configuration. -->
+	<mail 
+		smtpHost="$(mail.host)" 
+		smtpPort="$(mail.port)" 
+		siteEmailAddress="$(mail.emailAddress)" 
+		emailAddressRegexp="^[a-zA-Z0-9,!#\$%&amp;'\*\+/=\?\^_`\{\|}~-]+(\.[a-zA-Z0-9,!#\$%&amp;'\*\+/=\?\^_`\{\|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$">
+		<smtpAuth 
+			username="$(mail.username)" 
+			password="$(mail.password)" 
+			encrypted="true"/>
+	</mail>
+	<!-- Base map configuration. -->
+	<interactiveMap 
+		jsapiUrl="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.5" 
+		mapServiceUrl="http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_Imagery_World_2D/MapServer" 
+		mapServiceType="dynamic" 
+		geometryServiceUrl="http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer" 
+		locatorUrl="http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Geocode_USA/GeocodeServer" 
+		locatorSingleFieldParameter="city"/>
+	<catalog gptTablePrefix="GPT_">
+		<!-- Lucene configuration. -->
+		<lucene 
+			indexLocation="$(lucene.index.location)" 
+			writeLockTimeout="60000" 
+			useNativeFSLockFactory="true" 
+			analyzerClassName="org.apache.lucene.analysis.standard.StandardAnalyzer">
+		</lucene>
+		<!-- Additional configuration for Lucene -->
+		<parameter key="lucene.alwaysStoreXmlInIndex" value="false"/>
+		<parameter key="lucene.force.isPartOf" value=""/>
+		<parameter key="lucene.useSingleSearcher" value="true"/>
+		<parameter key="lucene.useSingleWriter" value="true"/>
+		<parameter key="lucene.useLocalWriter" value="true"/>
+		<parameter key="lucene.useRemoteWriter" value="false"/>
+		<parameter key="lucene.remoteWriterUrl" value=""/>
+		<!--  Lucene index based assertions (resource ratings and comments).  -->
+		<parameter key="assertion.index.enabled" value="true"/>
+		<parameter key="assertion.index.location" value="$(lucene.rating.location)"/>
+		<parameter key="assertion.index.allowNonLocalResourceIds" value="false"/>
+		<parameter key="assertion.rating.enabled" value="true"/>
+		<parameter key="assertion.comment.enabled" value="true"/>
+		<parameter key="assertion.comment.maxLength" value="2048"/>
+		<!-- Search settings. -->
+		<search 
+			searchTimeoutMillisecs="10000" 
+			distributedSearchTimeoutMillisecs="5000" 
+			distributedSearchMaxSelectedSites="5" 
+			searchResultsPerPage="10" 
+			searchResultsReviewsShown="only-reviewed" 
+			maxSavedSearches="10" 
+			allowExternalSiteSearch="true">
+			<!-- Settings for repositories available in federated search -->
+			<repositories>
+				<repository 
+					key="local" 
+					class="com.esri.gpt.catalog.search.SearchEngineLocal" 
+					labelResourceKey="catalog.search.searchSite.defaultsite" 
+					abstractResourceKey="catalog.search.searchSite.defaultsite.abstract"/>
+				<!--  Default search engine that catches blank rids -->
+				<repository 
+					key="^$" 
+					class="com.esri.gpt.catalog.search.SearchEngineLocal" 
+					labelResourceKey="" 
+					abstractResourceKey=""/>
+				<!-- arcgis.com rid.  Optional. -->
+				<repository 
+					key="arcgis.com" 
+					class="com.esri.gpt.catalog.search.SearchEngineRest" 
+					labelResourceKey="catalog.search.searchSite.agsonline" 
+					abstractResourceKey="catalog.search.searchSite.agsonline.abstract">
+					<parameter key="endPointSearchUrl" value="http://www.arcgis.com/sharing/search?q={searchTerms}&amp;start={startIndex}&amp;num={count}&amp;f=json"/>
+					<parameter key="defaultParamValues" value="q✔access:shared || access:public || access:private "/>
+					<parameter key="profileId" value="urn:esri:gpt:HTTP:JSON:ESRI:AGSONLINE"/>
+				</repository>
+				<!-- For the registered CS-W repositories flagged for viewing in federated search -->
+				<repository 
+					key="*" 
+					class="com.esri.gpt.catalog.search.SearchEngineExternalCsw"/>
+			</repositories>
+			<!-- Class registration to produce search result in a custom format. -->
+			<searchResultFormat>
+				<format regexFormat="csv" class="com.esri.gpt.control.georss.CsvWriter"></format>
+			</searchResultFormat>
+		</search>
+		<!-- Metadata Access Policy Configuration -->
+		<metadataAccessPolicy type="unrestricted"/>
+		<!-- Sitemap parameters -->
+		<parameter key="sitemap.baseUrl" value=""/>
+		<parameter key="sitemap.documentUrlPattern" value="/sitemap/document/{0}?f=html"/>
+		<parameter key="sitemap.documentUrlPattern.html" value="/sitemap/document/{0}?f=html"/>
+		<parameter key="sitemap.documentUrlPattern.htmlfragment" value="/sitemap/document/{0}?f=htmlfragment"/>
+		<parameter key="sitemap.documentUrlPattern.xml" value="/sitemap/document/{0}?f=xml"/>
+		<parameter key="sitemap.documentUrlPattern.kml" value="/sitemap/document/{0}?f=kml"/>
+		<parameter key="sitemap.urlsPerIndexFile" value="1000"/>
+		<parameter key="sitemap.urlsPerSitemapFile" value="1000"/>
+		<parameter key="sitemap.namespaceUri" value="http://www.sitemaps.org/schemas/sitemap/0.9"/>
+		<parameter key="sitemap.changefreq" value="weekly"/>
+		<parameter key="sitemap.priority" value=""/>
+		<!-- Web Harvester parameters. -->
+		<parameter key="webharvester.active" value="true"/>
+		<parameter key="webharvester.queueEnabled" value=""/>
+		<parameter key="webharvester.poolsize" value=""/>
+		<parameter key="webharvester.autoSelectFrequency" value=""/>
+		<parameter key="webharvester.watchDogFrequency" value=""/>
+		<parameter key="webharvester.baseContextPath" value=""/>
+		<parameter key="webharvester.maxRepRecords" value="70"/>
+		<parameter key="webharvester.maxRepErrors" value="7"/>
+		<parameter key="webharvester.resource.autoApprove" value=""/>
+		<parameter key="webharvester.updateindex" value="true"/>
+		<parameter key="webharvester.cleanup" value="true"/>
+		<!-- Additional Parameters. -->
+		<parameter key="catalog.enableEditForAllPubMethods" value="false"/>
+		<parameter key="catalog.admin.allowApplyToAll" value="true"/>
+		<parameter key="catalog.useCollections" value="false"/>
+		<parameter key="database.isCaseSensitive" value="true"/>
+		<parameter key="publicationRequest.autoApprove" value="false"/>
+		<parameter key="spatialRelevance.ranking.maxDoc" value="1000000"/>
+		<parameter key="rssProviderUrl" value=""/>
+		<parameter key="reverseProxy.baseContextPath" value=""/>
+		<parameter key="RestServlet.printXml.stripStyleSheets" value="true"/>
+		<parameter key="Administration.viewMetadata.stripStyleSheets" value="true"/>
+		<parameter key="resourceLinkBuilder.preview.filter" value="^ftp://.*|^ftps://.*|.*\.zip$|.*\.e00$|.*\.lpk$|.*\.pkinfo$|.*\.gz$|.*\.tgz$|.*\.tar$|.*\.rar$|.*\.shp$|.*\.dbf$|.*\.xls$|.*\.dwg$|.*\.dxf$|.*\.dgn$|.*\.mxd$|.*\.lyr$|.*\.nmf$|.*f=lyr.*|.*f=nmf.*|.*/globeserver.*|.*/gpserver.*|.*/geocodeserver.*|.*/geometryserver.*|.*/networkserver.*|.*/geodataserver.*|.*service=wfs.*|.*wfsserver.*|.*service=wcs.*|.*wcsserver.*|.*service=csw.*|.*cswserver.*"/>
+		<parameter key="httpClientRequest.connectionTimeout" value="2[MINUTE]"/>
+		<parameter key="httpClientRequest.responseTimeout" value="2[MINUTE]"/>
+		<parameter key="httpClient.alwaysClose" value="false"/>
+	</catalog>
+	<!-- Download data configuration. -->
+	<downloadData taskUrl="" mapServiceUrl="" mapServiceType="">
+		<features>
+			<feature key="File Geodatabase - GDB - .gdb" alias="gdb" resKey="catalog.download.feature.gdb"/>
+			<feature key="Shapefile - SHP - .shp" alias="shp" resKey="catalog.download.feature.shp"/>
+			<feature key="Autodesk AutoCAD - ACAD - .dxf" alias="dxf" resKey="catalog.download.feature.dxf"/>
+			<feature key="Autodesk AutoCAD - ACAD - .dwg" alias="dwg" resKey="catalog.download.feature.dwg"/>
+			<feature key="Bentley Microstation Design (V8) - DGN_V8 - .dgn" alias="dgn" resKey="catalog.download.feature.dgn"/>
+		</features>
+		<rasters>
+			<raster key="ESRI GRID - GRID" alias="grd" resKey="catalog.download.raster.grd"/>
+			<raster key="File Geodatabase - GDB - .gdb" alias="gdb" resKey="catalog.download.raster.gdb"/>
+			<raster key="ERDAS IMAGINE - IMG - .img" alias="img" resKey="catalog.download.raster.img"/>
+			<raster key="Tagged Image File Format - TIFF - .tif" alias="tif" resKey="catalog.download.raster.tif"/>
+			<raster key="Graphic Interchange Format - GIF - .gif" alias="gif" resKey="catalog.download.raster.gif"/>
+			<raster key="Joint Photographics Experts Group - JPEG - .jpg" alias="jpg" resKey="catalog.download.raster.jpg"/>
+			<raster key="Joint Photographics Experts Group - JPEG 2000 - .jp2" alias="jp2" resKey="catalog.download.raster.jp2"/>
+			<raster key="Bitmap - BMP - .bmp" alias="bmp" resKey="catalog.download.raster.bmp"/>
+			<raster key="Portable Network Graphics - PNG - .png" alias="png" resKey="catalog.download.raster.png"/>
+		</rasters>
+	</downloadData>
+	<!-- User Management configuration. simpleAdapter OR ldapAdapter. -->
+	<identity encKey="PtkESRI" realm="Geoportal">
+		<simpleAdapter>
+		    <account username="$(admin.name)" password="$(admin.password)" encrypted="false"/>
+		    <roles>
+		        <role key="gptRegisteredUser"/>
+		        <role key="gptPublisher"/>
+		        <role key="gptAdministrator"/>
+		    </roles>
+		</simpleAdapter>
+	</identity>
+	<!-- Scheduled Background Threads -->
+	<scheduler active="true" corePoolSize="0">
+		<!-- Catalog synchronization (sync Lucene index with the database) -->
+		<thread class="com.esri.gpt.catalog.context.CatalogSynchronizer" at="01:00"/>
+		<!-- Index optimization -->
+		<!-- <thread class="com.esri.gpt.catalog.lucene.LuceneIndexOptimizer" at="03:30"/>-->
+	</scheduler>
+</gptConfig>
