@@ -47,7 +47,7 @@ def init():
     _configure_jdbc()
     restart_tomcat()
     
-def build_war():
+def build_new():
     _install_postgres()
     _init_postgres()
     _install_tomcat()
@@ -116,9 +116,9 @@ def _install_geoportal():
     #unpack it
     run('sudo chown -R vagrant:vagrant /usr/local/etc' % vars)
     run('cd /usr/local/etc &&\
-        git clone https://github.com/Esri/geoportal-server.git')
+        git clone https://github.com/Ecotrust/geoportal-server.git')
 
-    run('sudo -u geoportal cp -r /usr/local/etc/geoportal-server/geoportal/* %(gp_dir)s' % vars)
+    run('cp -r /usr/local/etc/geoportal-server/geoportal/* %(gp_dir)s' % vars)
 
     run('sudo chown -R geoportal:geoportal %(gp_dir)s' % vars)
     
