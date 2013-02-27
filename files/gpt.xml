@@ -455,7 +455,7 @@
     <identity encKey="PtkESRI" realm="Geoportal">  
 
         <simpleAdapter>
-            <account username="gptuser" password="gptuser" encrypted="false"/>
+            <account username="geoportal" password="geoportal" encrypted="false"/>
             <roles>
                 <role key="gptRegisteredUser"/>
                 <role key="gptPublisher"/>

@@ -51,9 +51,9 @@ package {'openjdk-6-jre':
     ensure => "latest",
 }
 
-package {'openjdk-6-jdk':
-    ensure => "latest",
-}
+#package {'openjdk-6-jdk':
+#    ensure => "latest",
+#}
 
 file { "/usr/local/etc/geoportal":
     ensure => "directory",

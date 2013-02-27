@@ -7,7 +7,7 @@ vars = {
     'git_gp_dir': '/usr/local/etc/geoportal-server',
     'tomcat_dir': '/usr/local/tomcat6',
     'webapp_dir': '/usr/local/tomcat6/webapps',
-    'dbscripts_dir': 'etc/sql/PostgreSQL',
+    'dbscripts_dir': 'geoportal/etc/sql/PostgreSQL',
     'tomcat_version': '6.0.36'
 }
 
@@ -51,6 +51,7 @@ def build_new():
     _install_postgres()
     _init_postgres()
     _install_tomcat()
+    _install_jdk()
     _install_ant()
     _install_geoportal()
     _prep_build()
@@ -67,6 +68,7 @@ def _install_postgres():
     #change to /usr/local/etc, not /tmp/post...., nvm, rectified by tar command
     run('sudo wget -O /tmp/postgresql-9.1.2.tar.gz ftp://ftp.postgresql.org/pub/source/v9.1.2/postgresql-9.1.2.tar.gz')
     run('sudo tar zxvf /tmp/postgresql-9.1.2.tar.gz --directory /usr/local/etc/')
+    # run('sudo tar zxvf /vagrant/Offline/postgresql-9.1.2.tar.gz --directory /usr/local/etc/')       #If dl times are slow
     run('cd /usr/local/etc/postgresql-9.1.2 && \
         ./configure && \
         make && \
@@ -78,7 +80,7 @@ def _install_postgres():
     
     #Create PG data dir
     run('sudo mkdir /usr/local/pgsql/data')
-    run('export PGDATA=/usr/local/pgsql/data')
+    run('export PGDATA=/usr/local/pgsql/data')      #?
     run('sudo chown postgres:postgres /usr/local/pgsql/data')
     
 def _init_postgres():
@@ -94,6 +96,7 @@ def _init_postgres():
 def _install_tomcat():
     run('sudo wget -O /tmp/apache-tomcat-%(tomcat_version)s.tar.gz http://apache.org/dist/tomcat/tomcat-6/v%(tomcat_version)s/bin/apache-tomcat-%(tomcat_version)s.tar.gz' % vars)
     run('sudo tar zxvf /tmp/apache-tomcat-%(tomcat_version)s.tar.gz --directory /tmp/' % vars)
+    # run('sudo tar zxvf /vagrant/Offline/apache-tomcat-%(tomcat_version)s.tar.gz --directory /tmp/' % vars)
     run('sudo mv /tmp/apache-tomcat-%(tomcat_version)s %(tomcat_dir)s' % vars)
     
     #Apply startup script
@@ -106,6 +109,9 @@ def _install_tomcat():
     #Run Tomcat
     run('sudo /etc/init.d/tomcat start')
 
+def _install_jdk():
+    run('sudo apt-get install openjdk-6-jdk')
+    
 def _install_ant():
     run('sudo apt-get install ant')
     run('sudo ln -s %(tomcat_dir)s/lib/catalina-ant.jar /usr/share/ant/lib/' % vars)
@@ -114,20 +120,22 @@ def _install_ant():
     #When you do, remove download step from puppet script
 def _install_geoportal():
     #unpack it
-    run('sudo chown -R vagrant:vagrant /usr/local/etc' % vars)
+    run('sudo chown -R vagrant:vagrant /usr/local/etc')
     run('cd /usr/local/etc &&\
         git clone https://github.com/Ecotrust/geoportal-server.git')
+        # git clone https://github.com/Esri/geoportal-server.git')
 
-    run('cp -r /usr/local/etc/geoportal-server/geoportal/* %(gp_dir)s' % vars)
+    run('mv /usr/local/etc/geoportal-server/* %(gp_dir)s' % vars)
 
     run('sudo chown -R geoportal:geoportal %(gp_dir)s' % vars)
     
 def _prep_build():        
     run('cd %(gp_dir)s &&\
         sudo -u geoportal cp -r /vagrant/files/build_from_ant %(gp_dir)s &&\
-        sudo -u geoportal wget -O %(gp_dir)s/build_from_ant/build/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
+        sudo cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(gp_dir)s/build_from_ant/build/lib/postgresql-9.1-901.jdbc4.jar' % vars)
+        # sudo -u geoportal wget -O %(gp_dir)s/build_from_ant/build/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
     
-def _config_database():
+def _config_database():                     #Putting geoportal-server at /usr/local/etc/geoportal (not geoportal-server/geoportal)
     #Set up appropriate DB permissions
     run ('sudo cp /vagrant/files/grants_linuxpg.sh %(gp_dir)s/%(dbscripts_dir)s/grants_linuxpg.sh' % vars)
     run ('sudo cp /vagrant/files/create_schema_linuxpg.sh %(gp_dir)s/%(dbscripts_dir)s/create_schema_linuxpg.sh' % vars)
@@ -166,14 +174,12 @@ def _deploy_geoportal():
     restart_tomcat()
 
     run('sudo cp /vagrant/files/gpt.xml %(webapp_dir)s/geoportal/WEB-INF/classes/gpt/config/gpt.xml' % vars)
-    run('sudo cp -r %(webapp_dir)s/geoportal/WEB-INF/classes  %(webapp_dir)s/geoportal/src' % vars)
 
 def _configure_jdbc():
-    run('sudo wget -O %(tomcat_dir)s/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
+    # run('sudo wget -O %(tomcat_dir)s/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
+    run('sudo cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(tomcat_dir)s/lib/postgresql-9.1-901.jdbc4.jar' % vars)
     run('sudo cp /vagrant/files/geoportal.xml %(tomcat_dir)s/conf/Catalina/localhost/' % vars)
-    run('sudo cp /vagrant/files/geoportal.xml %(tomcat_dir)s/lib/' % vars)
     run('sudo chmod +wx %(tomcat_dir)s/conf/Catalina/localhost/geoportal.xml' % vars)
-    run('sudo chmod +wx %(tomcat_dir)s/lib/geoportal.xml' % vars)
     
 def start_tomcat():
     with settings(hide('warnings'), warn_only=True):
