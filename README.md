@@ -16,6 +16,11 @@ Under the files dir you will find code written by ESRI inc, licensed under the A
 ### Install Postgres, Tomcat, and ESRI GeoPortal Server
 ```fab dev init```
 
+Or, if you want to run from a fresh .war build from bleeding-edge geoportal code:
+```fab dev build_new```
+
+*NOTE: currently there's an issue with running installs from the fabfile. If you ssh into the VM and run the fabfile commands by hand it works fine.
+
 ### Prompts:
 * Password for vagrant
 ``vagrant``
