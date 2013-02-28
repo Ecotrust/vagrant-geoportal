@@ -4,7 +4,7 @@ import time
 
 vars = {
     'gp_dir': '/usr/local/etc/geoportal',
-    'git_gp_dir': '/usr/local/etc/geoportal-server',
+    'repo_dir': '/usr/local/etc/geoportal-server',
     'tomcat_dir': '/usr/local/tomcat6',
     'webapp_dir': '/usr/local/tomcat6/webapps',
     'dbscripts_dir': 'geoportal/etc/sql/PostgreSQL',
@@ -37,10 +37,12 @@ def all():
     env.hosts = dev() + prod() + test()
 
 def init():
-    """ Initialize the geoportal application """   
+    """ Initialize the geoportal application """
+    _install_dos2unix()
     _install_postgres()
     _init_postgres()
     _install_tomcat()
+    start_tomcat()
     _install_geoportal()
     _config_database()
     _deploy_geoportal()
@@ -48,9 +50,11 @@ def init():
     restart_tomcat()
     
 def build_new():
+    _install_dos2unix()
     _install_postgres()
     _init_postgres()
     _install_tomcat()
+    start_tomcat()
     _install_jdk()
     _install_ant()
     _install_geoportal()
@@ -63,6 +67,9 @@ def build_new():
     
 def _set_environment():
     run('')
+    
+def _install_dos2unix():
+    run('sudo apt-get install dos2unix')
     
 def _install_postgres():
     #change to /usr/local/etc, not /tmp/post...., nvm, rectified by tar command
@@ -105,9 +112,6 @@ def _install_tomcat():
     run('sudo chown root:root /etc/init.d/tomcat')
     run('sudo chmod +x /etc/init.d/tomcat')
     run('sudo update-rc.d tomcat defaults')
-    
-    #Run Tomcat
-    run('sudo /etc/init.d/tomcat start')
 
 def _install_jdk():
     run('sudo apt-get install openjdk-6-jdk')
@@ -122,23 +126,25 @@ def _install_geoportal():
     #unpack it
     run('sudo chown -R vagrant:vagrant /usr/local/etc')
     run('cd /usr/local/etc &&\
-        git clone https://github.com/Ecotrust/geoportal-server.git')
+        git clone https://github.com/Ecotrust/geoportal-server.git' % vars)
         # git clone https://github.com/Esri/geoportal-server.git')
 
-    run('mv /usr/local/etc/geoportal-server/* %(gp_dir)s' % vars)
+    run('sudo cp -r %(repo_dir)s/* %(gp_dir)s/' % vars)
 
     run('sudo chown -R geoportal:geoportal %(gp_dir)s' % vars)
     
 def _prep_build():        
-    run('cd %(gp_dir)s &&\
-        sudo -u geoportal cp -r /vagrant/files/build_from_ant %(gp_dir)s &&\
-        sudo cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(gp_dir)s/build_from_ant/build/lib/postgresql-9.1-901.jdbc4.jar' % vars)
-        # sudo -u geoportal wget -O %(gp_dir)s/build_from_ant/build/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
+    run('cd %(gp_dir)s/geoportal &&\
+        sudo -u geoportal cp -r /vagrant/files/build_from_ant %(gp_dir)s/geoportal/ &&\
+        sudo -u geoportal wget -O /vagrant/files/postgresql-9.1-901.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.1-901.jdbc4.jar &&\
+        sudo -u geoportal cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(gp_dir)s/geoportal/build_from_ant/build/lib/postgresql-9.1-901.jdbc4.jar' % vars)
+        # sudo cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(gp_dir)s/build_from_ant/build/lib/postgresql-9.1-901.jdbc4.jar' % vars)
     
 def _config_database():                     #Putting geoportal-server at /usr/local/etc/geoportal (not geoportal-server/geoportal)
     #Set up appropriate DB permissions
     run ('sudo cp /vagrant/files/grants_linuxpg.sh %(gp_dir)s/%(dbscripts_dir)s/grants_linuxpg.sh' % vars)
     run ('sudo cp /vagrant/files/create_schema_linuxpg.sh %(gp_dir)s/%(dbscripts_dir)s/create_schema_linuxpg.sh' % vars)
+    run('sudo dos2unix %(gp_dir)s/%(dbscripts_dir)s/*' % vars)
     run('sudo chown -R postgres:postgres %(gp_dir)s/%(dbscripts_dir)s' % vars)
     run('sudo chmod -R +x %(gp_dir)s/%(dbscripts_dir)s' % vars)
     
@@ -162,11 +168,11 @@ def _config_database():                     #Putting geoportal-server at /usr/lo
             pwd_status = run('echo $?')
    
 def _build_from_ant():
-    run('cd %(gp_dir)s/build_from_ant/build &&\
+    run('cd %(gp_dir)s/geoportal/build_from_ant/build &&\
         sudo -u geoportal ant clean &&\
         sudo -u geoportal ant local.package &&\
         sudo -u geoportal ant war &&\
-        sudo cp %(gp_dir)s/build/geoportal.war /vagrant/files/geoportal.war' % vars)
+        sudo cp %(gp_dir)s/geoportal/build/geoportal.war /vagrant/files/geoportal.war' % vars)
     
 def _deploy_geoportal():
     run('sudo cp /vagrant/files/geoportal.war %(webapp_dir)s/geoportal.war' % vars)
@@ -176,7 +182,7 @@ def _deploy_geoportal():
     run('sudo cp /vagrant/files/gpt.xml %(webapp_dir)s/geoportal/WEB-INF/classes/gpt/config/gpt.xml' % vars)
 
 def _configure_jdbc():
-    # run('sudo wget -O %(tomcat_dir)s/lib/postgresql-9.2-1002.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar' % vars)
+    # run('sudo wget -O %(tomcat_dir)s/lib/postgresql-9.1-901.jdbc4.jar http://jdbc.postgresql.org/download/postgresql-9.1-901.jdbc4.jar' % vars)
     run('sudo cp /vagrant/files/postgresql-9.1-901.jdbc4.jar %(tomcat_dir)s/lib/postgresql-9.1-901.jdbc4.jar' % vars)
     run('sudo cp /vagrant/files/geoportal.xml %(tomcat_dir)s/conf/Catalina/localhost/' % vars)
     run('sudo chmod +wx %(tomcat_dir)s/conf/Catalina/localhost/geoportal.xml' % vars)
