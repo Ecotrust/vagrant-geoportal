@@ -7,6 +7,7 @@ Under the files dir you will find code written by ESRI inc, licensed under the A
 
 ### Local Requirements:
 * [git] (https://help.github.com/articles/set-up-git)
+* [VirtualBox] (http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html)
 * [Vagrant] (http://www.vagrantup.com/)
 * [Fabric] (http://fabfile.org)
 
