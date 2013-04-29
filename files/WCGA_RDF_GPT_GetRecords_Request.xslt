@@ -62,11 +62,6 @@ Template default
                       <ogc:Literal>{CB5299D6-5AE4-485A-97BD-78C22AE0473B}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!--State and County Boundaries -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{F311F674-92A7-4D2C-8EE6-61A4584CF273}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
                       <!--Park  Boundaries -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{95B66DB9-AA1B-49A5-96B6-F7229C864EC3}</ogc:Literal>
@@ -97,16 +92,6 @@ Template default
                       <ogc:Literal>{19B20845-CD2B-4799-9CED-DCD9A4E8F212}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!--Parks -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{F9F7D92C-A5F1-440F-A1D3-FF80F905C4F7}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
-                      <!--Coastal Zone Boundary -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{66838A18-66BD-4155-BF62-FEBA2BA6F5AF}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
                       <!--Watershed Boundary -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{7D3D2134-CAB7-4290-AA52-02168FF6D726}</ogc:Literal>
@@ -117,7 +102,7 @@ Template default
                       <ogc:Literal>{C6C1EEF2-48DF-4B0C-927B-E436A21D35AF}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                      <ogc:PropertyIsEqualTo>
-                      <!-- Marine Ecoregions -->
+                      <!-- Marine Ecoregions 2000 -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{DBAB105A-F8FE-4240-AB1B-9517C9B993EB}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
@@ -237,7 +222,12 @@ Template default
                       <ogc:Literal>{6B4476F2-4A50-4E9C-9554-02EC91F8FE30}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!-- CA Non Native Aquatics -->
+                      <!-- Winter Steelhead Distribution -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{4703AF74-EBFE-4310-9779-467A044BA2D6}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                       <!-- CA Non Native Aquatics -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{8B2F4A87-CCB5-4EF4-B396-D57A7A5CF404}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
@@ -281,11 +271,6 @@ Template default
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{B223B625-FA78-47AB-8133-A397657F6B7D}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>                      
-                    <ogc:PropertyIsEqualTo>
-                      <!-- Shoreline Change -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{05D6CB12-E800-4FD4-A713-FF5635FFDF7D}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
                       <!-- Coho Range -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
@@ -342,11 +327,6 @@ Template default
                       <ogc:Literal>{239AA309-837B-44D2-B811-3F19E4B14416}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!-- Coastal Armoring II -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{7539524A-2712-4CBE-BD60-B0B89F20AF72}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
                       <!-- Ports and Facilities -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{A797BEBF-206B-49D7-BFCD-392E3A6BF87E}</ogc:Literal>
@@ -360,11 +340,6 @@ Template default
                       <!-- Coastal Bluff Errosion -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{80744CF1-E44B-4462-A5BA-84F21A9B972C}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
-                      <!-- Coastal Zone Map -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{52947CEF-D7A6-4075-84A7-09EB433484D7}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
                       <!-- Coastal Zone Boundary -->
@@ -400,11 +375,6 @@ Template default
                       <!-- PWA Sea Level Rise -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{FA1AB0D1-98A5-408E-A430-503B0139DDCA}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
-                      <!-- Coastal Armoring 2011 -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{0E2C7BC2-7B7E-4820-B9A0-65FE1F60D677}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
                       <!-- National Inventory of Dams -->
@@ -447,18 +417,10 @@ Template default
                       <ogc:Literal>{8206404B-D152-45E6-9874-BDF0A37CA3F5}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!-- Bird Areas of Concern -->
+                      <!-- Bird Areas  -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{E28F62A6-62BB-4952-98FC-7FD5AA487DB5}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
-
-
-
-
-
-
-
-
                     <!-- /CALIFORNIA -->
 
                     <!-- Oregon Spatial Data Library -->
@@ -716,6 +678,144 @@ Template default
                       <ogc:Literal>{B8125FE1-5C8F-4F38-AE0D-9AC8CD81C958}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <!-- /Washington Geoportal -->
+
+                    <!-- ocean.data.gov Geoportal -->
+                    <ogc:PropertyIsEqualTo>
+                    <!-- California Shoreline Change -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{E501AA26-0359-4C58-D67C-25602FC56731}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Critical Habitat for Tidewater Goby -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{3825E77B-CC39-4BB9-8AB0-C176DE84B12B}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Significant US Earthquakes -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{F56A4C6E-2A68-665A-764E-D8102CF7BD26}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- National Wetlands Inventory - WMS -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{DE68113D-72BE-475B-85CB-38F8E1FDB6C3}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- National Wetlands Inventory - Mapper -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{5E8582C2-2219-4615-9C16-6A3D23D2F5D2}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- National Wetlands Inventory -REST -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{3E849E58-050B-48C8-80CE-493EC6C4DE98}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- National Wetlands Inventory -KML -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{3C205B58-1837-4F28-B39D-D5588A69DB89}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Protected Areas - Ownership -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{01A2032B-1D4A-8F14-7D89-B21AE89B14EB}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Protected Areas - Conservation Status -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{4E398FB9-C0A1-08FB-64F2-D2EC68A8D5EC}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- National Gazateer -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{62072601-F822-F080-0A80-94913624A7E9}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Critical Habitat for Delta Smelt -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{ADF7D3A0-B6DC-4B44-89A2-2610100FC049}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- NCMP Web Page -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{0273D69A-3B0E-7E05-ED2B-C6B97D0E6A82}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Habitat of particular concern -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{945FFFE5-6EE3-4162-8308-702717F31516}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- US Pacific West Coast Internet Map Server -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{1CB571A6-D368-0D1D-B823-323DD3CE142A}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- US Pacific West Coast Gloria Side Scan -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{04DEF625-B9A9-436E-BC02-7E05CA6512B1}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Essential Fish Habitat -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{D5BFE273-50C5-47E3-B2E6-7E50B88B19D3}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- hydropol_transportation - waterways -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{B587BC6D-72C7-4CD2-8551-C734857C0ECC}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- NOAA Ocean Observing Architecture -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{8336529E-2495-610B-6E87-A8A554DE34D0}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Ports -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{6332F148-C3E5-4B79-9350-1B5AECE8CD94}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Regional Coastal DEMS -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{4AABE568-D968-4F7D-ADDD-B580E0AB4394}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!--  Coastal Community DEMS -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{BF5A9A07-D4EA-4B00-BF76-3D4090652494}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!--  ETOPO1 Globo RElief Model -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{9E7393F1-13ED-4497-847F-2465233CC574}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!--  National Map - Land Cover Database -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{2206E7CB-416A-461F-7DFB-B7D5A90B02B4}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!--  1:200000 Hydrographic Units -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{B9C4716F-92DA-4811-F5D5-7ACB03B92F0D}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Nutrient Impaired Strams -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{914D9CD4-2C49-AAEB-EA65-0854DB4977BB}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <ogc:PropertyIsEqualTo>
+                    <!-- Pacific Coast Offshore Wind Resource -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{AAE9D6A0-7E3E-4A0E-84FF-77C5EB25C491}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+		    <ogc:PropertyIsEqualTo>
+                    <!-- National Estuaries Restoration Inventory -->
+                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
+                      <ogc:Literal>{677F4DB1-E74A-E2D3-14D9-A36F53990E03}</ogc:Literal>
+                    </ogc:PropertyIsEqualTo>
+                    <!-- /ocean.data.gov Geoportal -->
                   </ogc:Or>
                 </ogc:And>
               </ogc:Filter>
