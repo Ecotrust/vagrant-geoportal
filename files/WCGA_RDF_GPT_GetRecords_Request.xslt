@@ -147,11 +147,6 @@ Template default
                       <ogc:Literal>{0DE9B557-D8DB-43CE-BA4E-E42651E58F63}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
-                      <!-- Land Cover -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{1EDBD638-6086-4E73-8FF9-8E08FFD378EA}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
                       <!-- Average Salinity -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{AB29F44B-33B8-48F4-9CE0-0D092B0309C3}</ogc:Literal>
@@ -170,16 +165,6 @@ Template default
                       <!-- Marine Ecological Regions -->
                       <ogc:PropertyName>dc:identifier</ogc:PropertyName>
                       <ogc:Literal>{8FB21EFE-FD0B-4857-BCEB-7E1132868C25}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
-                      <!-- Ocean Basemap -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{6FD8F3B7-FE91-4F4E-B839-2116DFAE9027}</ogc:Literal>
-                    </ogc:PropertyIsEqualTo>
-                    <ogc:PropertyIsEqualTo>
-                      <!-- World Street Map -->
-                      <ogc:PropertyName>dc:identifier</ogc:PropertyName>
-                      <ogc:Literal>{4AEC4CC2-34D6-41A6-9D49-D7B735252495}</ogc:Literal>
                     </ogc:PropertyIsEqualTo>
                     <ogc:PropertyIsEqualTo>
                       <!-- Bird Species of Concern -->
