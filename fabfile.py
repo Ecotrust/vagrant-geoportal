@@ -8,7 +8,7 @@ vars = {
     'tomcat_dir': '/usr/local/tomcat6',
     'webapp_dir': '/usr/local/tomcat6/webapps',
     'dbscripts_dir': 'geoportal/etc/sql/PostgreSQL',
-    'tomcat_version': '6.0.36'
+    'tomcat_version': '6.0.37'
 }
 
 env.forward_agent = True

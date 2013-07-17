@@ -31,6 +31,10 @@ package { "vim":
     ensure => "latest"
 }
 
+package { "nginx":
+    ensure => "latest"
+}
+
 package {'libgeos-dev':
     ensure => "latest"
 }
