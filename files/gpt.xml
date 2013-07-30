@@ -14,7 +14,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<gptConfig version="1.2.2">
+<gptConfig version="1.2.4">
 
     <databaseReference name="gpt" jndiName="jdbc/gpt"/>
     
@@ -49,7 +49,7 @@
            (from <name> element of WMS GetCapabilities xml)  
            Example: "['name1','name2','name3','name4']"
         - geometryServiceUrl: REST URL to an ArcGIS Server GeometryServer service.
-        - locatorUrl: REST URL to an ArcGIS Server GeocodeServer service
+        - locatorUrl: REST URL to an ArcGIS Server GeocodeServer service, e.g. locatorUrl="http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Geocode_USA/GeocodeServer"
         - locatorSingleFieldParameter: field for the GeocodeServer service upon which locations can be searched 
     -->
     
@@ -139,7 +139,7 @@
     <mapViewer>
         <instance 
             url="{contextPath}/viewer/index.jsp" 
-            className="com.esri.gpt.catalog.search.MapViewerFlex">
+            className="com.esri.gpt.catalog.search.MapViewerFlex_2_4">
         <parameter key="width" value="1000"/>
         <parameter key="height" value="700"/>
         <parameter key="regexCanConsumeUrl" value=""/>
@@ -284,6 +284,7 @@
 				Default: com.esri.gpt.control.webharvest.engine.DefaultHarvestPolicy
             - webharvester.policy.simple.frequency: frequency how often 'full harvest' should be enforced. 
 				For example, if the value is 3, every third harvest for a site will be a full harvest.
+            - webharvester.agp2agp.maxItems: maximum number of items to harvest through Agp2Agp protocol.
         -->    
         <parameter key="webharvester.active" value="true"/>
         <parameter key="webharvester.queueEnabled" value=""/>
@@ -298,6 +299,7 @@
         <parameter key="webharvester.cleanup" value="true"/>
         <parameter key="webharvester.policy.class" value="com.esri.gpt.control.webharvest.engine.SimpleHarvestPolicy"/>
         <parameter key="webharvester.policy.simple.frequency" value="1"/>
+        <parameter key="webharvester.agp2agp.maxItems" value="2000"/>
 
         <!-- Additional Parameters.
             - catalog.enableEditForAllPubMethods:
@@ -394,6 +396,8 @@
         <parameter key="catalog.cart.maxItems" value="100"/>
         <parameter key="catalog.cart.processor" value="com.esri.gpt.control.cart.ZipXmls"/>
 
+				<!-- Mapping file to map dcat fields to lucene index fields -->
+				<parameter key="dcat.mappings" value="gpt/metadata/dcat-mappings.xml"/>
     </catalog>
     
     <!-- Download data configuration.
@@ -580,6 +584,38 @@
         <!-- Index optimization --> 
         <!-- <thread class="com.esri.gpt.catalog.lucene.LuceneIndexOptimizer" at="03:30"/>-->
     </scheduler>
+    
+    <!-- Harvesting protocols configuration.
+         default      - if true, the default configuration will be loaded first,
+         factoryClass - canonical name of the protocol factory class,
+         resourceKey  - resource key of the protocol name.
+    -->
+    <protocols default="false">
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.ResourceProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.resource"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.ArcGISProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.arcgis"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.ArcImsProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.arcims"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.OaiProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.oai"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.WafProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.waf"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.CswProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.csw"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.ThreddsProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.thredds"/>
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.AtomProtocolFactory"
+                resourceKey="catalog.harvest.manage.edit.protocol.atom"/>
+<!--      
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.Agp2AgpProtocolFactory"
+               resourceKey="catalog.harvest.manage.edit.protocol.agp2agp"/>  
+-->
+<!--      
+      <protocol factoryClass="com.esri.gpt.control.webharvest.protocol.factories.Agp2AgpRelaxedProtocolFactory"
+               resourceKey="catalog.harvest.manage.edit.protocol.agp2agp"/>  
+-->
+    </protocols>
 
 </gptConfig>
 
