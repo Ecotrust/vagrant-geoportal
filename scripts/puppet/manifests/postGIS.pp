@@ -1,62 +1,83 @@
-# ensure that apt update is run before any packages are installed
-class apt {
-  exec { "apt-update":
-    command => "/usr/bin/apt-get update"
+# ensure that yum update is run before any packages are installed
+class yum {
+  exec { "yum-update":
+    command => "/usr/bin/yum update -y"
   }
 
-  # Ensure apt-get update has been run before installing any packages
-  Exec["apt-update"] -> Package <| |>
+  # Ensure yum update has been run before installing any packages
+  # Exec["yum-update"] -> Package <| |>
 
 }
 
-include apt
+#class nginx {
+#  exec { "include-nginx":
+#    command => "/bin/rpm -ivhf /vagrant/files/nginx-release-centos-6-0.el6.ngx.noarch.rpm"
+#  }
+#}
 
-package { "build-essential":
-    ensure => "installed"
+include yum
+#include nginx
+
+#From http://serverfault.com/questions/127460/how-do-i-install-a-yum-package-group-with-puppet
+define yumgroup($ensure = "present", $optional = false){
+  case $ensure {
+    present,installed: {
+      $pkg_types_arg = $optional ? {
+        true => "--setopt=group_package_types=optional,default,mandatory",
+        default => ""
+      }
+      exec { "Installing $name yum group":
+        command => "yum -y groupinstall $pkg_types_arg $name",
+        unless => "yum -y groupinstall $pkg_types_arg $name --downloadonly",
+        timeout => 600,
+      }
+    }
+  }
 }
 
-package { "git-core":
-    ensure => "latest"
-}
+#yumrepo { "epel":
+#    mirrorlist => 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch',
+#    enabled => 1,
+#    descr => "Epel"
+#}
 
-# package { "subversion":
-#     ensure => "latest"
-# }
-
-# package { "mercurial":
-#     ensure => "latest"
-# }
-
-package { "vim":
-    ensure => "latest"
-}
-
-package { "nginx":
-    ensure => "latest"
-}
-
-package {'libgeos-dev':
-    ensure => "latest"
-}
-
-package {'libgdal1-dev':
-    ensure => "latest"
-}
-
-package {'libreadline6-dev':
+package {'gcc':
     ensure => "latest",
 }
 
-package {'zlib1g-dev':
+#package {'libreadline6-dev':     For ubuntu
+package {'readline-devel':
     ensure => "latest",
 }
 
-package {'openjdk-6-jre':
+package {'zlib-devel':
     ensure => "latest",
 }
 
-#package {'openjdk-6-jdk':
+package {'make':
+    ensure => "latest",
+}
+
+package {'java-1.6.0-openjdk':
+    ensure => "latest",
+}
+
+package {'system-config-securitylevel':
+    ensure => "latest",
+}
+
+
+package { "git":
+    ensure => "latest"
+}
+
+package { "vim-enhanced":
+    ensure => "latest"
+}
+
+#package { "nginx":
 #    ensure => "latest",
+#    require => Exec[ "include-nginx"]
 #}
 
 file { "/usr/local/etc/geoportal":
@@ -71,8 +92,12 @@ file { "/usr/local/etc/lucene/assertion":
     ensure => "directory",
 }
 
+group { "admin":
+    ensure => "present",
+}
+
 user { "geoportal":
-  groups => ['adm', 'cdrom', 'sudo', 'dip', 'plugdev', 'lpadmin', 'sambashare', 'admin'],
+  groups => ['wheel'],
   comment => 'geoportal os user. This user was created by Puppet',
   ensure => 'present',
   managehome => 'true'

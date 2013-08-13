@@ -8,7 +8,9 @@ vars = {
     'tomcat_dir': '/usr/local/tomcat6',
     'webapp_dir': '/usr/local/tomcat6/webapps',
     'dbscripts_dir': 'geoportal/etc/sql/PostgreSQL',
-    'tomcat_version': '6.0.37'
+    'tomcat_version': '6.0.37',                         #Docs use 6.0.35
+    'jdk_name': 'java-1.6.0-openjdk-1.6.0.0',
+    'bash_file': '/etc/bashrc'
 }
 
 env.forward_agent = True
@@ -39,28 +41,14 @@ def all():
 def init():
     """ Initialize the geoportal application """
     _install_dos2unix()
+    _edit_bash()
     _install_postgres()
     _init_postgres()
+    #reboot?
     _install_tomcat()
     start_tomcat()
     _install_geoportal()
     _config_database()
-    _deploy_geoportal()
-    _configure_jdbc()
-    restart_tomcat()
-    
-def build_new():
-    _install_dos2unix()
-    _install_postgres()
-    _init_postgres()
-    _install_tomcat()
-    start_tomcat()
-    _install_jdk()
-    _install_ant()
-    _install_geoportal()
-    _prep_build()
-    _config_database()
-    _build_from_ant()
     _deploy_geoportal()
     _configure_jdbc()
     restart_tomcat()
@@ -69,8 +57,20 @@ def _set_environment():
     run('')
     
 def _install_dos2unix():
-    run('sudo apt-get install dos2unix')
+    run('sudo yum install dos2unix -y')
+    # run('sudo apt-get install dos2unix')
     
+def _edit_bash():
+    run ('sudo cp %(bash_file)s /vagrant/bashrc' % vars)
+    run('sudo echo "export JAVA_HOME=/usr/lib/jvm/%(jdk_name)s\n\
+        export JRE_HOME=/usr/lib/jvm/%(jdk_name)s\n\
+        export LD_LIBRARY_PATH=/usr/local/pgsql/lib\n\
+        export PGDATA=/usr/local/pgsql/data\n\
+        export PATH=$PATH:/usr/local/pgsql/bin\n\
+        export CATALINA_HOME=/usr/local/tomcat6\n\
+        export CATALINA_BASE=/usr/local/tomcat6" >> /vagrant/files/bashrc' % vars)
+    run ('sudo cp /vagrant/bashrc %(bash_file)s' % vars)
+
 def _install_postgres():
     #change to /usr/local/etc, not /tmp/post...., nvm, rectified by tar command
     run('sudo wget -O /tmp/postgresql-9.1.2.tar.gz ftp://ftp.postgresql.org/pub/source/v9.1.2/postgresql-9.1.2.tar.gz')
@@ -82,23 +82,25 @@ def _install_postgres():
         sudo make install')
         
     #Create postgres user
-    run('sudo adduser postgres')
-    run('sudo addgroup postgres postgres')
+    run('sudo useradd postgres')
+    run('sudo groupadd postgres')
+    run('sudo usermod -a -G postgres postgres')
     
     #Create PG data dir
     run('sudo mkdir /usr/local/pgsql/data')
-    run('export PGDATA=/usr/local/pgsql/data')      #?
+    # run('export PGDATA=/usr/local/pgsql/data')      #?
     run('sudo chown postgres:postgres /usr/local/pgsql/data')
     
 def _init_postgres():
     run('sudo -u postgres /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data initdb') 
-    run('sudo -u postgres /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data start') 
+    run('sudo -u postgres /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start') 
     
     #set up postgres to restart on boot
     run('sudo cp /usr/local/etc/postgresql-9.1.2/contrib/start-scripts/linux /etc/init.d/postgresql')
     run('sudo chown root:root /etc/init.d/postgresql')
     run('sudo chmod +x /etc/init.d/postgresql')
-    run('sudo update-rc.d postgresql defaults')
+    # run('sudo update-rc.d postgresql defaults')   #ubuntu
+    run('sudo chkconfig --add postgresql')
     
 def _install_tomcat():
     run('sudo wget -O /tmp/apache-tomcat-%(tomcat_version)s.tar.gz http://apache.org/dist/tomcat/tomcat-6/v%(tomcat_version)s/bin/apache-tomcat-%(tomcat_version)s.tar.gz' % vars)
@@ -111,15 +113,8 @@ def _install_tomcat():
     run('sudo cp /usr/local/etc/tomcat /etc/init.d/tomcat')
     run('sudo chown root:root /etc/init.d/tomcat')
     run('sudo chmod +x /etc/init.d/tomcat')
-    run('sudo update-rc.d tomcat defaults')
+    run('sudo chkconfig --add tomcat')
 
-def _install_jdk():
-    run('sudo apt-get install openjdk-6-jdk')
-    
-def _install_ant():
-    run('sudo apt-get install ant')
-    run('sudo ln -s %(tomcat_dir)s/lib/catalina-ant.jar /usr/share/ant/lib/' % vars)
-    
 #Replace this with an install of the cutting edge - perhaps via github?
     #When you do, remove download step from puppet script
 def _install_geoportal():
@@ -204,11 +199,11 @@ def restart_tomcat():
     
 def start_postgres():
     with settings(warn_only=True):
-        result = run('sudo service postgresql status', pty=False)
+        result = run('sudo /etc/init.d/postgresql status', pty=False)
         
         while not result.return_code == 0:
             print 'Postgres status = ' + result
-            run('sudo service postgresql start', pty=False)
+            run('sudo /etc/init.d/postgresql start', pty=False)
             time.sleep(3)
             run('')
-            result = run('sudo service postgresql status', pty=False)
+            result = run('sudo /etc/init.d/postgresql status', pty=False)
