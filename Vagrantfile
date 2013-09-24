@@ -30,7 +30,7 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 8003
+  config.vm.forward_port 80, 80
   config.vm.forward_port 5432, 25432
   config.vm.forward_port 8080, 8082
   config.vm.forward_port 8000, 8004
@@ -41,6 +41,7 @@ Vagrant::Config.run do |config|
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-app", "/usr/local/apps/", "../data"
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  config.vm.share_folder "v-rdf", "/tmp/rdf", "../WCGA/wc-data-registry"
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.

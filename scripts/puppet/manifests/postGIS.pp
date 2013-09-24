@@ -62,7 +62,7 @@ package {'java-1.6.0-openjdk':
     ensure => "latest",
 }
 
-package {'system-config-securitylevel':
+package {'system-config-firewall':
     ensure => "latest",
 }
 
